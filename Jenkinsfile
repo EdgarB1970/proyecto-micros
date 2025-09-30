@@ -1,17 +1,19 @@
 pipeline {
     agent any
+
     environment {
-        PATH = "C:/Program Files/Docker/Docker/resources/bin;"
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin:$PATH"
     }
+
     tools {
-        maven 'Maven3'    // Nombre EXACTO configurado en Jenkins -> Global Tool Configuration
-        jdk 'Java21'      // O el que hayas configurado (ej: Java17)
+        maven 'Maven3'
+        jdk 'Java21'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/EdgarB1970/proyecto-micros.git', credentialsId: 'github-credentials'
+                git branch: 'main', url: 'https://github.com/EdgarB1970/proyecto-micros.git', credentialsId: 'github-credentials'
             }
         }
 
@@ -30,14 +32,9 @@ pipeline {
         stage('Docker Run') {
             steps {
                 bat '''
-                docker ps -a --format "{{.Names}}" | findstr /I euraka
-                IF %ERRORLEVEL%==0 (
-                    docker stop euraka
-                    docker rm euraka
-                ) ELSE (
-                    echo No existe contenedor euraka
-                )
-                docker run -d -p 8761:8761 --name euraka euraka
+                    docker stop euraka || exit 0
+                    docker rm euraka || exit 0
+                    docker run -d -p 8761:8761 --name euraka euraka
                 '''
             }
         }
