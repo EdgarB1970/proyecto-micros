@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/EdgarB1970/proyecto-micros.git', credentialsId: 'github-credentials'
+                git branch: 'main', url: 'https://github.com/EdgarB1970/proyecto-micros.git', credentialsId: 'github-credentials'
             }
         }
 
