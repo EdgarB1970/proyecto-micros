@@ -1,16 +1,16 @@
 pipeline {
     agent any
-   environment {
-        PATH = "C:/Program Files/Docker/Docker/resources/bin;"
+    environment {
+        PATH = "C:/Program Files/Docker/Docker/resources/bin;" + env.PATH
     }
     tools {
-        maven 'Maven3'    // Nombre EXACTO configurado en Jenkins -> Global Tool Configuration
-        jdk 'Java21'      // O el que hayas configurado (ej: Java17)
+        maven 'Maven3'
+        jdk 'Java21'
     }
 
     stages {
         stage('Checkout') {
-     steps {
+            steps {
                 git branch: 'master', url: 'https://github.com/EdgarB1970/proyecto-micros.git', credentialsId: 'github-credentials'
             }
         }
@@ -29,7 +29,10 @@ pipeline {
 
         stage('Docker Run') {
             steps {
-                bat 'docker stop euraka || true && docker rm euraka || true'
+                bat '''
+                docker stop euraka || echo "No estaba corriendo"
+                docker rm euraka || echo "No existía"
+                '''
                 bat 'docker run -d -p 8761:8761 --name euraka euraka'
             }
         }
