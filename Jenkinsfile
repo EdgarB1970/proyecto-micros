@@ -17,20 +17,20 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t euraka .'
+                bat 'docker build -t euraka .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                sh 'docker stop euraka || true && docker rm euraka || true'
-                sh 'docker run -d -p 8761:8761 --name euraka euraka'
+                bat 'docker stop euraka || true && docker rm euraka || true'
+                bat 'docker run -d -p 8761:8761 --name euraka euraka'
             }
         }
     }
